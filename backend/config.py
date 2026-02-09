@@ -25,6 +25,16 @@ class Settings:
     # Environment
     ENVIRONMENT: str = os.getenv("ENVIRONMENT", "development")
     
+    # Check if we have API keys (if not, use mock mode)
+    @property
+    def use_mock_mode(self) -> bool:
+        """Check if we should use mock mode (no API keys provided)."""
+        return not bool(
+            self.GOOGLE_ADS_API_KEY or 
+            self.META_ACCESS_TOKEN or 
+            self.AMAZON_CLIENT_ID
+        )
+    
     # Server
     API_HOST: str = os.getenv("API_HOST", "0.0.0.0")
     API_PORT: int = int(os.getenv("API_PORT", "8000"))
