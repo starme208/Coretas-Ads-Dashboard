@@ -1,3 +1,12 @@
+/**
+ * @deprecated This file is deprecated. The frontend now uses the FastAPI backend API.
+ * Kept for reference/fallback purposes only.
+ * 
+ * All API calls are now handled through:
+ * - useCampaigns() -> GET /api/campaigns
+ * - useGeneratePlan() -> POST /api/plans/generate
+ * - useExecutePlan() -> POST /api/campaigns/execute
+ */
 import type { CampaignWithMetrics, GeneratedPlan, PlanInput } from "@/lib/schema";
 
 function randomBetween(min: number, max: number): number {

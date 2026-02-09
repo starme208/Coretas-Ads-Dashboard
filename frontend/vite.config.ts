@@ -26,7 +26,7 @@ export default defineConfig({
     host: true,
     proxy: {
       "/api": {
-        target: process.env.RAILS_SERVER_URL || "http://localhost:3000",
+        target: process.env.VITE_API_URL || "http://localhost:8000",
         changeOrigin: true,
       },
     },
