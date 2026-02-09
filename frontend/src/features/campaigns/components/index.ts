@@ -1,3 +1,9 @@
 export { CreateCampaignModal } from "./CreateCampaignModal";
 export { StatusBadge } from "./StatusBadge";
 export { PlatformIcon } from "./PlatformIcon";
+export { CampaignFiltersDialog } from "./CampaignFiltersDialog";
+export { CampaignSearchBar } from "./CampaignSearchBar";
+export { CampaignMetrics } from "./CampaignMetrics";
+export { CampaignTable } from "./CampaignTable";
+export { DashboardHeader } from "./DashboardHeader";
+export { CampaignTableCard } from "./CampaignTableCard";

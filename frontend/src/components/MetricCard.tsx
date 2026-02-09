@@ -13,7 +13,7 @@ interface MetricCardProps {
 export function MetricCard({ title, value, trend, trendUp, icon, className }: MetricCardProps) {
   return (
     <div className={cn(
-      "bg-card rounded-xl p-6 border border-border shadow-sm hover:shadow-md transition-all duration-300",
+      "bg-card rounded-xl p-6 border border-border shadow-sm hover:shadow-md transition-all duration-300 cursor-pointer",
       className
     )}>
       <div className="flex justify-between items-start mb-4">

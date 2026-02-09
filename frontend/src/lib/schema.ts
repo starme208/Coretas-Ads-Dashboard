@@ -20,14 +20,7 @@ export type Campaign = z.infer<typeof campaignSchema>;
 export const planInputSchema = z.object({
   objective: z.enum(["Sales", "Leads"]),
   dailyBudget: z.coerce.number().min(1),
-  productCategories: z
-    .string()
-    .transform((str) =>
-      str
-        .split(",")
-        .map((s) => s.trim())
-        .filter((s) => s.length > 0)
-    ),
+  productCategories: z.string().min(1, "Product categories are required"),
   country: z.string().optional(),
   language: z.string().optional(),
 });
@@ -44,11 +37,16 @@ export const generatedPlanSchema = z.object({
   creative_pack: z.object({
     headlines: z.array(z.string()),
     descriptions: z.array(z.string()),
+    long_headlines: z.array(z.string()).optional(),
+    primary_texts: z.array(z.string()).optional(),
+    callouts: z.array(z.string()).optional(),
     image_urls: z.array(z.string()),
+    logo_url: z.string().optional(),
   }),
   targeting_hints: z.object({
     keywords: z.array(z.string()),
     audiences: z.array(z.string()),
+    placements: z.array(z.string()).optional(),
   }),
   bidding_strategy: z.string(),
 });

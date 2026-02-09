@@ -65,6 +65,7 @@ class CampaignRepository:
         days: int = 7,
         platform: Optional[Platform] = None,
         status: Optional[CampaignStatus] = None,
+        campaign_type: Optional[CampaignType] = None,
     ) -> List[dict]:
         """
         Get campaigns with aggregated metrics for the last N days.
@@ -79,6 +80,8 @@ class CampaignRepository:
             query = query.filter(Campaign.platform == platform)
         if status:
             query = query.filter(Campaign.status == status)
+        if campaign_type:
+            query = query.filter(Campaign.campaign_type == campaign_type)
         
         campaigns = query.order_by(Campaign.created_at.desc()).all()
         

@@ -25,11 +25,11 @@ export function AppSidebar() {
   return (
     <Sidebar collapsible="icon" className="border-0 shadow-xl shadow-black/5">
       <SidebarHeader className="p-5 pb-4">
-        <Link href="/dashboard" className="flex items-center gap-3 outline-none rounded-xl focus-visible:ring-2 focus-visible:ring-primary/30">
+        <Link href="/" className="flex items-center gap-3 outline-none rounded-xl focus-visible:ring-2 focus-visible:ring-primary/30 group-data-[state=collapsed]:justify-center">
           <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-gradient-to-br from-primary to-accent text-white shadow-lg shadow-primary/25">
             <Sparkles className="h-5 w-5" />
           </div>
-          <div className="flex flex-col min-w-0">
+          <div className="flex flex-col min-w-0 group-data-[state=collapsed]:hidden">
             <span className="font-display font-bold text-lg tracking-tight text-foreground truncate">
               AutoAds
             </span>
@@ -40,7 +40,7 @@ export function AppSidebar() {
         </Link>
       </SidebarHeader>
 
-      <SidebarContent className="p0x-1">
+      <SidebarContent className="px-1">
         <SidebarGroup>
           <SidebarGroupContent>
             <SidebarMenu className="gap-0.5">
@@ -61,7 +61,7 @@ export function AppSidebar() {
                       <Link
                         href={item.url}
                         className={cn(
-                          "flex items-center gap-3 rounded-lg px-3 py-5 text-sm",
+                          "flex items-center gap-3 rounded-lg px-2 py-5 text-sm group-data-[state=collapsed]:justify-center",
                           !isActive &&
                             "text-muted-foreground hover:text-foreground hover:bg-muted/60"
                         )}
@@ -74,7 +74,7 @@ export function AppSidebar() {
                         >
                           <item.icon className="h-4 w-4" />
                         </span>
-                        <span className="truncate">{item.title}</span>
+                        <span className="truncate group-data-[state=collapsed]:hidden">{item.title}</span>
                       </Link>
                     </SidebarMenuButton>
                   </SidebarMenuItem>
@@ -94,12 +94,12 @@ export function AppSidebar() {
             >
               <button
                 type="button"
-                className="flex w-full items-center gap-3 rounded-lg px-3 py-2.5 text-sm"
+                className="flex w-full items-center gap-3 rounded-lg px-3 py-2.5 text-sm group-data-[state=collapsed]:justify-center"
               >
                 <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-muted/50">
                   <LogOut className="h-4 w-4" />
                 </span>
-                <span className="truncate">Sign out</span>
+                <span className="truncate group-data-[state=collapsed]:hidden">Sign out</span>
               </button>
             </SidebarMenuButton>
           </SidebarMenuItem>

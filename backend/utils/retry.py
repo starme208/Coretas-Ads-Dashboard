@@ -1,10 +1,10 @@
 """Retry utility with exponential backoff."""
 import time
-import logging
 from typing import Callable, TypeVar, Optional
 from functools import wraps
+from utils.logger import get_logger
 
-logger = logging.getLogger(__name__)
+logger = get_logger(__name__)
 
 T = TypeVar('T')
 

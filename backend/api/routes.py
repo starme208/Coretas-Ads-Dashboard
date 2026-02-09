@@ -20,6 +20,7 @@ router = APIRouter(prefix="/api", tags=["campaigns"])
 def get_campaigns(
     platform: Optional[str] = Query(None, description="Filter by platform (google, meta, amazon)"),
     status: Optional[str] = Query(None, description="Filter by status"),
+    campaign_type: Optional[str] = Query(None, description="Filter by campaign type (pmax, shopping, sponsored_brands)"),
     days: int = Query(7, ge=1, le=90, description="Number of days for metrics aggregation"),
     db: Session = Depends(get_db),
 ):
@@ -28,7 +29,7 @@ def get_campaigns(
     
     Returns campaigns with performance metrics aggregated over the specified number of days.
     """
-    from models.campaign import Platform, CampaignStatus
+    from models.campaign import Platform, CampaignStatus, CampaignType
     
     # Parse filters
     platform_enum = None
@@ -51,12 +52,23 @@ def get_campaigns(
                 detail=f"Invalid status: {status}. Must be one of: created, pending, active, failed"
             )
     
+    campaign_type_enum = None
+    if campaign_type:
+        try:
+            campaign_type_enum = CampaignType[campaign_type.upper()]
+        except KeyError:
+            raise HTTPException(
+                status_code=400,
+                detail=f"Invalid campaign_type: {campaign_type}. Must be one of: pmax, shopping, sponsored_brands"
+            )
+    
     # Get campaigns with metrics
     campaign_repo = CampaignRepository(db)
     campaigns_data = campaign_repo.get_with_metrics(
         days=days,
         platform=platform_enum,
         status=status_enum,
+        campaign_type=campaign_type_enum,
     )
     
     return campaigns_data
@@ -133,6 +145,7 @@ def get_metrics(
     Returns metrics for all campaigns or a specific campaign if campaign_id is provided.
     """
     metric_repo = MetricRepository(db)
+    campaign_repo = CampaignRepository(db)
     
     if campaign_id:
         # Get metrics for specific campaign
@@ -146,22 +159,32 @@ def get_metrics(
             end_date=end_date,
         )
         
-        return [
-            {
-                "id": m.id,
-                "campaign_id": m.campaign_id,
+        # Get campaign info
+        campaign = campaign_repo.get_by_id(campaign_id)
+        
+        result = []
+        for m in metrics:
+            # Calculate CTR
+            ctr = (m.clicks / m.impressions * 100) if m.impressions > 0 else 0.0
+            
+            result.append({
+                "platform": campaign.platform.value if campaign else "unknown",
+                "campaign_id": str(m.campaign_id),
+                "campaign_name": campaign.name if campaign else "Unknown",
+                "campaign_type": campaign.campaign_type.value if campaign else "unknown",
                 "date": m.date.isoformat(),
                 "spend": float(m.spend),
                 "impressions": m.impressions,
                 "clicks": m.clicks,
-                "conversions": m.conversions,
-                "conversion_value": float(m.conversion_value) if m.conversion_value else None,
+                "ctr": round(ctr, 2),
+                "conversions": m.conversions or 0,
+                "conversion_value": float(m.conversion_value) if m.conversion_value else 0.0,
                 "currency": m.currency,
-            }
-            for m in metrics
-        ]
+            })
+        
+        return result
     else:
-        # Get aggregated metrics for all campaigns
+        # Get daily metrics for all campaigns (matching required reporting structure)
         from repositories import CampaignRepository
         from datetime import datetime, timedelta
         
@@ -173,15 +196,30 @@ def get_metrics(
         
         result = []
         for campaign in campaigns:
-            aggregated = metric_repo.aggregate_metrics(
+            # Get daily metrics for this campaign
+            daily_metrics = metric_repo.get_by_campaign(
                 campaign_id=campaign.id,
                 start_date=start_date,
                 end_date=end_date,
             )
-            result.append({
-                "campaign_id": campaign.id,
-                "campaign_name": campaign.name,
-                **aggregated,
-            })
+            
+            for m in daily_metrics:
+                # Calculate CTR
+                ctr = (m.clicks / m.impressions * 100) if m.impressions > 0 else 0.0
+                
+                result.append({
+                    "platform": campaign.platform.value,
+                    "campaign_id": str(campaign.id),
+                    "campaign_name": campaign.name,
+                    "campaign_type": campaign.campaign_type.value,
+                    "date": m.date.isoformat(),
+                    "spend": float(m.spend),
+                    "impressions": m.impressions,
+                    "clicks": m.clicks,
+                    "ctr": round(ctr, 2),
+                    "conversions": m.conversions or 0,
+                    "conversion_value": float(m.conversion_value) if m.conversion_value else 0.0,
+                    "currency": m.currency,
+                })
         
         return result

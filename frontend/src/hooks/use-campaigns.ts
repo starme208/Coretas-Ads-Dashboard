@@ -5,11 +5,17 @@ import { apiRequest } from "@/lib/queryClient";
 
 const CAMPAIGNS_QUERY_KEY = [api.campaigns.list.path] as const;
 
-export function useCampaigns() {
+export function useCampaigns(platform?: string, campaignType?: string) {
   return useQuery({
-    queryKey: CAMPAIGNS_QUERY_KEY,
+    queryKey: [...CAMPAIGNS_QUERY_KEY, platform, campaignType],
     queryFn: async () => {
-      const response = await fetch(api.campaigns.list.path);
+      const params = new URLSearchParams();
+      if (platform) params.append('platform', platform);
+      if (campaignType) {
+        params.append('campaign_type', campaignType);
+      }
+      const url = params.toString() ? `${api.campaigns.list.path}?${params.toString()}` : api.campaigns.list.path;
+      const response = await fetch(url);
       if (!response.ok) {
         const text = await response.text();
         throw new Error(`${response.status}: ${text}`);

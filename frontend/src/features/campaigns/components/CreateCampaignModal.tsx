@@ -303,7 +303,7 @@ export function CreateCampaignModal({ open, onOpenChange }: CreateCampaignModalP
                       ) : (
                         <>
                           <CheckCircle2 className="mr-2 h-4 w-4" />
-                          Approve & Launch All
+                          Create All
                         </>
                       )}
                     </Button>

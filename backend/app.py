@@ -1,18 +1,14 @@
 """FastAPI application entry point."""
-import logging
 from fastapi import FastAPI, Request, status
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
 from fastapi.exceptions import RequestValidationError
 from config import settings
 from api.routes import router
+from utils.logger import get_logger
 
-# Configure logging
-logging.basicConfig(
-    level=logging.INFO,
-    format="%(asctime)s - %(name)s - %(levelname)s - %(message)s"
-)
-logger = logging.getLogger(__name__)
+# Initialize centralized logging
+logger = get_logger(__name__)
 
 # Create FastAPI app
 app = FastAPI(

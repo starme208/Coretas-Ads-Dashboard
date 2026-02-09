@@ -1,5 +1,4 @@
 """Campaign execution service for creating campaigns across all platforms."""
-import logging
 from typing import List, Tuple
 from sqlalchemy.orm import Session
 from schemas.plan import GeneratedPlan
@@ -8,8 +7,9 @@ from repositories import CampaignRepository, MetricRepository
 from services.google_service import GoogleService
 from services.meta_service import MetaService
 from services.amazon_service import AmazonService
+from utils.logger import get_logger
 
-logger = logging.getLogger(__name__)
+logger = get_logger(__name__)
 
 
 class CampaignExecutionService:

@@ -1,12 +1,12 @@
 """Google Ads service for creating Performance Max campaigns."""
-import logging
 from typing import Optional
 from datetime import datetime
 from schemas.plan import GeneratedPlan
 from models.campaign import Platform, CampaignType, CampaignStatus
 from config import settings
+from utils.logger import get_logger
 
-logger = logging.getLogger(__name__)
+logger = get_logger(__name__)
 
 
 class GoogleService:
@@ -34,7 +34,7 @@ class GoogleService:
                     "deliveryMethod": "STANDARD",
                 },
                 "biddingStrategy": {
-                    "type": "TARGET_ROAS" if plan.bidding_strategy == "maximize_conversion_value" else "TARGET_CPA",
+                    "type": "MAXIMIZE_CONVERSION_VALUE" if plan.bidding_strategy == "maximize_conversion_value" else "MAXIMIZE_CONVERSIONS",
                 },
                 "startDate": datetime.utcnow().strftime("%Y-%m-%d"),
                 "endDate": None,  # No end date

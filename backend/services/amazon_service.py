@@ -1,12 +1,12 @@
 """Amazon Ads service for creating Sponsored Brands campaigns."""
-import logging
 from typing import Optional
 from datetime import datetime
 from schemas.plan import GeneratedPlan
 from models.campaign import Platform, CampaignType, CampaignStatus
 from config import settings
+from utils.logger import get_logger
 
-logger = logging.getLogger(__name__)
+logger = get_logger(__name__)
 
 
 class AmazonService:
