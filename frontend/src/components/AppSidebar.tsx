@@ -13,10 +13,10 @@ import { Link, useLocation } from "wouter";
 import { cn } from "@/lib/utils";
 
 const menuItems = [
-  { title: "Dashboard", icon: LayoutDashboard, url: "/dashboard" },
-  { title: "Campaigns", icon: Rocket, url: "#" },
-  { title: "History", icon: History, url: "#" },
-  { title: "Settings", icon: Settings, url: "#" },
+  { title: "Dashboard", icon: LayoutDashboard, url: "/dashboard", disabled: false },
+  { title: "Campaigns", icon: Rocket, url: "#", disabled: true },
+  { title: "History", icon: History, url: "#", disabled: true },
+  { title: "Settings", icon: Settings, url: "#", disabled: true },
 ];
 
 export function AppSidebar() {
@@ -40,7 +40,7 @@ export function AppSidebar() {
         </Link>
       </SidebarHeader>
 
-      <SidebarContent className="px-1">
+      <SidebarContent className="p0x-1">
         <SidebarGroup>
           <SidebarGroupContent>
             <SidebarMenu className="gap-0.5">
