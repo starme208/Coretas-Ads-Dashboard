@@ -46,6 +46,3 @@ logs/
 # Alembic
 alembic/versions/*.pyc
 
-# uv
-.uv/
-uv.lock

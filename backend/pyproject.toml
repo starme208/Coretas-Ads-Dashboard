@@ -1,33 +1,29 @@
-[project]
+[tool.poetry]
 name = "coretas-backend"
 version = "0.1.0"
 description = "Coretas Dashboard-First Auto-Builder Backend"
-requires-python = ">=3.11"
-dependencies = [
-    "fastapi>=0.104.0",
-    "uvicorn[standard]>=0.24.0",
-    "sqlalchemy>=2.0.0",
-    "alembic>=1.12.0",
-    "pydantic>=2.5.0",
-    "python-dotenv>=1.0.0",
-    "httpx>=0.25.0",
+packages = [
+    { include = "api" },
+    { include = "models" },
+    { include = "repositories" },
+    { include = "schemas" },
+    { include = "services" },
+    { include = "utils" },
 ]
+
+[tool.poetry.dependencies]
+python = "^3.11"
+fastapi = ">=0.104.0"
+uvicorn = { extras = ["standard"], version = ">=0.24.0" }
+sqlalchemy = ">=2.0.0"
+alembic = ">=1.12.0"
+pydantic = ">=2.5.0"
+python-dotenv = ">=1.0.0"
+httpx = ">=0.25.0"
+
+[tool.poetry.group.dev.dependencies]
+ruff = "*"
 
 [build-system]
-requires = ["hatchling"]
-build-backend = "hatchling.build"
-
-[tool.hatch.build.targets.wheel]
-packages = ["api", "models", "repositories", "schemas", "services", "utils"]
-only-include = [
-    "api",
-    "models", 
-    "repositories",
-    "schemas",
-    "services",
-    "utils",
-    "app.py",
-    "config.py",
-    "database.py",
-    "alembic.ini",
-]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"

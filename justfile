@@ -18,7 +18,7 @@ install:
 # Install backend dependencies
 install-backend:
     @echo "🐍 Installing backend dependencies..."
-    cd backend && uv sync
+    cd backend && poetry install
 
 # Install frontend dependencies
 install-frontend:
@@ -48,7 +48,7 @@ setup: install setup-env
 # Run backend server
 dev-backend:
     @echo "🔧 Starting backend server..."
-    @cd backend && uv run uvicorn app:app --reload --port 8000
+    @cd backend && poetry run uvicorn app:app --reload --port 8000
 
 # Run frontend dev server
 dev-frontend:
@@ -62,12 +62,12 @@ dev-frontend:
 # Run database migrations
 migrate:
     @echo "🗄️  Running database migrations..."
-    cd backend && uv run alembic upgrade head
+    cd backend && poetry run alembic upgrade head
 
 # Create a new migration
 migrate-create MESSAGE:
     @echo "📝 Creating migration: {{MESSAGE}}"
-    cd backend && uv run alembic revision --autogenerate -m "{{MESSAGE}}"
+    cd backend && poetry run alembic revision --autogenerate -m "{{MESSAGE}}"
 
 # Reset database (WARNING: deletes all data)
 reset-db:
@@ -107,12 +107,12 @@ check-frontend:
 # Lint backend (if configured)
 lint-backend:
     @echo "🔍 Linting backend..."
-    cd backend && uv run ruff check . || echo "⚠️  Ruff not installed, skipping..."
+    cd backend && poetry run ruff check . || echo "⚠️  Ruff not installed, skipping..."
 
 # Format backend code
 format-backend:
     @echo "✨ Formatting backend..."
-    cd backend && uv run ruff format . || echo "⚠️  Ruff not installed, skipping..."
+    cd backend && poetry run ruff format . || echo "⚠️  Ruff not installed, skipping..."
 
 # ============================================
 # Cleanup
@@ -160,7 +160,7 @@ status:
     @echo "📊 Project Status:"
     @echo ""
     @echo "Backend:"
-    @cd backend && uv --version 2>/dev/null && echo "  ✅ uv installed" || echo "  ❌ uv not installed"
+    @cd backend && poetry --version 2>/dev/null && echo "  ✅ Poetry installed" || echo "  ❌ Poetry not installed"
     @echo ""
     @echo "Frontend:"
     @cd frontend && npm --version >/dev/null 2>&1 && echo "  ✅ npm installed" || echo "  ❌ npm not installed"
@@ -196,7 +196,7 @@ logs:
 # Run production backend
 prod-backend:
     @echo "🚀 Starting production backend..."
-    @cd backend && uv run uvicorn app:app --host 0.0.0.0 --port 8000
+    @cd backend && poetry run uvicorn app:app --host 0.0.0.0 --port 8000
 
 # Preview production build
 preview:
